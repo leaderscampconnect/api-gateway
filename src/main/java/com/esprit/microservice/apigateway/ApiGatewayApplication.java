@@ -18,17 +18,27 @@ public class ApiGatewayApplication {
     @Bean
     public RouteLocator getRoute(RouteLocatorBuilder builder) {
         return builder.routes()
-
                 .route("api-camping-site", r -> r.path("/api/site-camping/**")
                         .uri("lb://api-camping"))
-
                 .route("api-camping-inscription", r -> r.path("/api/inscriptionsite/**")
                         .uri("lb://api-camping"))
-
                 .route("user-service", r -> r.path("/api/users/**")
                         .uri("lb://user-service"))
-
+                .route("event-service", r -> r.path("/api/events/**")
+                        .filters(filters -> filters.stripPrefix(1))
+                        .uri("lb://event-service"))
+                .route("notification-service", r -> r.path("/api/notifications/**")
+                        .filters(filters -> filters.stripPrefix(1))
+                        .uri("lb://notification-service"))
+                .route("event-openapi", r -> r.path("/openapi/events")
+                        .filters(filters -> filters.setPath("/v3/api-docs"))
+                        .uri("lb://event-service"))
+                .route("notification-openapi", r -> r.path("/openapi/notifications")
+                        .filters(filters -> filters.setPath("/v3/api-docs"))
+                        .uri("lb://notification-service"))
+                .route("camping-openapi", r -> r.path("/openapi/camping")
+                        .filters(filters -> filters.setPath("/api/v3/api-docs"))
+                        .uri("lb://api-camping"))
                 .build();
     }
-
 }
