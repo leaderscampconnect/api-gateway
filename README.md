@@ -9,9 +9,10 @@ health monitoring, and an aggregated Swagger UI.
 | External route | Target | Access |
 | --- | --- | --- |
 | `GET /api/events/**` | `event-service` | Public |
-| Event registration endpoints | `event-service` | Authenticated |
+| Event registration endpoints | `event-service` | `USER`, `ADMIN`, or `ORGANIZER` |
 | Event management endpoints | `event-service` | `ADMIN` or `ORGANIZER` |
-| `/api/notifications/**` | `notification-service` | Authenticated |
+| Notification reads/read-state | `notification-service` | Any assigned application role |
+| Notification create/update/delete | `notification-service` | `ADMIN` or `ORGANIZER` |
 | `/api/users/**` | `user-service` | Authenticated |
 | `/api/site-camping/**` | `api-camping` | Authenticated |
 | `/api/inscriptionsite/**` | `api-camping` | Authenticated |
@@ -26,6 +27,10 @@ Realm roles are converted to Spring authorities:
 - Keycloak `ADMIN` becomes `ROLE_ADMIN`.
 - Keycloak `ORGANIZER` becomes `ROLE_ORGANIZER`.
 - Keycloak `USER` becomes `ROLE_USER`.
+
+Authentication without one of these application roles is not sufficient for
+event registration or notification access. This keeps authorization decisions
+centralized at the Gateway rather than duplicated across each microservice.
 
 `KEYCLOAK_ISSUER_URI` is the browser-visible issuer in the token.
 `KEYCLOAK_JWK_SET_URI` can use the Docker-internal Keycloak hostname. Keeping
