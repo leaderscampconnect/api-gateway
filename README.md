@@ -8,7 +8,8 @@ health monitoring, and an aggregated Swagger UI.
 
 | External route | Target | Access |
 | --- | --- | --- |
-| `GET /api/events/**` | `event-service` | Public |
+| Normal `GET /api/events/**` catalogue routes | `event-service` | Public |
+| Event/notification aggregation routes | `event-service` | `ADMIN` or `ORGANIZER` |
 | Event registration endpoints | `event-service` | `USER`, `ADMIN`, or `ORGANIZER` |
 | Event management endpoints | `event-service` | `ADMIN` or `ORGANIZER` |
 | Notification reads/read-state | `notification-service` | Any assigned application role |
