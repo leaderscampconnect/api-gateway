@@ -39,6 +39,9 @@ public class ApiGatewayApplication {
                 .route("camping-openapi", r -> r.path("/openapi/camping")
                         .filters(filters -> filters.setPath("/api/v3/api-docs"))
                         .uri("lb://api-camping"))
+                .route("user-openapi", r -> r.path("/openapi/users")
+                        .filters(filters -> filters.setPath("/v3/api-docs"))
+                        .uri("lb://user-service"))
                 .build();
     }
 }

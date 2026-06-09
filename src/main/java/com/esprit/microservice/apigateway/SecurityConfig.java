@@ -46,17 +46,45 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/openapi/**"
                         ).permitAll()
+                        // Public Endpoints
+                        .pathMatchers(HttpMethod.POST, "/api/users").permitAll() // User registration
+                        .pathMatchers(HttpMethod.GET, "/api/site-camping/getAll").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/api/site-camping/getsite/**").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/api/site-camping/*/availability").permitAll()
+                        
+                        // User Service
+                        .pathMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
+                        .pathMatchers("/api/users/**").hasAnyRole("ADMIN", "CAMPER", "SITE_OWNER")
+                        
+                        // Camping Service
+                        .pathMatchers(HttpMethod.POST, "/api/site-camping/addSite").hasAnyRole("ADMIN", "SITE_OWNER")
+                        .pathMatchers(HttpMethod.PATCH, "/api/site-camping/updateSite/**").hasAnyRole("ADMIN", "SITE_OWNER")
+                        .pathMatchers(HttpMethod.PATCH, "/api/site-camping/close/**").hasAnyRole("ADMIN", "SITE_OWNER")
+                        .pathMatchers(HttpMethod.GET, "/api/site-camping/my-sites").hasAnyRole("ADMIN", "SITE_OWNER")
+                        
+                        // Booking Service
+                        .pathMatchers(HttpMethod.POST, "/api/inscriptionsite/add").hasAnyRole("ADMIN", "CAMPER")
+                        .pathMatchers(HttpMethod.PATCH, "/api/inscriptionsite/cancel/**").hasAnyRole("ADMIN", "CAMPER")
+                        .pathMatchers(HttpMethod.GET, "/api/inscriptionsite/my-inscriptions/**").hasAnyRole("ADMIN", "CAMPER")
+                        .pathMatchers(HttpMethod.PATCH, "/api/inscriptionsite/confirm-payment/**").hasAnyRole("ADMIN", "CAMPER", "SITE_OWNER")
+                        
+                        .pathMatchers(HttpMethod.GET, "/api/inscriptionsite/bySite/**").hasAnyRole("ADMIN", "SITE_OWNER")
+                        .pathMatchers(HttpMethod.GET, "/api/inscriptionsite/my-camp-booking-list/**").hasAnyRole("ADMIN", "SITE_OWNER")
+                        .pathMatchers(HttpMethod.GET, "/api/inscriptionsite/getAll").hasRole("ADMIN")
+                        
+                        // Event Service
                         .pathMatchers(HttpMethod.GET, "/api/events/**").permitAll()
                         .pathMatchers(HttpMethod.POST, "/api/events/*/registrations")
                         .hasAnyRole("USER", "ORGANIZER", "ADMIN")
                         .pathMatchers(HttpMethod.DELETE, "/api/events/*/registrations/*")
                         .hasAnyRole("USER", "ORGANIZER", "ADMIN")
                         .pathMatchers("/api/events/**").hasAnyRole("ADMIN", "ORGANIZER")
-                        .pathMatchers(HttpMethod.GET, "/api/notifications/**")
-                        .hasAnyRole("USER", "ORGANIZER", "ADMIN")
-                        .pathMatchers(HttpMethod.PATCH, "/api/notifications/**")
-                        .hasAnyRole("USER", "ORGANIZER", "ADMIN")
-                        .pathMatchers("/api/notifications/**").hasAnyRole("ADMIN", "ORGANIZER")
+                        
+                        // Notification Service
+                        .pathMatchers(HttpMethod.GET, "/api/notifications/**").hasAnyRole("USER", "ORGANIZER", "ADMIN", "CAMPER", "SITE_OWNER")
+                        .pathMatchers(HttpMethod.PATCH, "/api/notifications/**").hasAnyRole("USER", "ORGANIZER", "ADMIN", "CAMPER", "SITE_OWNER")
+                        .pathMatchers("/api/notifications/**").hasAnyRole("ADMIN", "ORGANIZER", "SITE_OWNER")
+                        
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth
