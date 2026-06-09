@@ -39,6 +39,24 @@ class SecurityRoutesTest {
     }
 
     @Test
+    void eventNotificationAggregationRequiresOrganizerRole() {
+        webTestClient.get()
+                .uri("/api/events/with-notification")
+                .exchange()
+                .expectStatus().isUnauthorized();
+
+        clientWithRole("USER").get()
+                .uri("/api/events/with-notification")
+                .exchange()
+                .expectStatus().isForbidden();
+
+        clientWithRole("ORGANIZER").get()
+                .uri("/api/events/with-notification")
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
     void anonymousUserCannotRegister() {
         webTestClient.post()
                 .uri("/api/events/event-1/registrations")
@@ -120,6 +138,11 @@ class SecurityRoutesTest {
         @GetMapping("/api/events")
         String getEvents() {
             return "events";
+        }
+
+        @GetMapping("/api/events/with-notification")
+        String getEventsWithNotifications() {
+            return "events-with-notifications";
         }
 
         @PostMapping("/api/events")
