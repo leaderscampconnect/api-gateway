@@ -46,6 +46,11 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/openapi/**"
                         ).permitAll()
+                        .pathMatchers(
+                                HttpMethod.GET,
+                                "/api/events/with-notification",
+                                "/api/events/notifications"
+                        ).hasAnyRole("ADMIN", "ORGANIZER")
                         .pathMatchers(HttpMethod.GET, "/api/events/**").permitAll()
                         .pathMatchers(HttpMethod.POST, "/api/events/*/registrations")
                         .hasAnyRole("USER", "ORGANIZER", "ADMIN")
