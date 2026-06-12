@@ -17,6 +17,8 @@ health monitoring, and an aggregated Swagger UI.
 | `/api/users/**` | `user-service` | Authenticated |
 | `/api/site-camping/**` | `api-camping` | Authenticated |
 | `/api/inscriptionsite/**` | `api-camping` | Authenticated |
+| `GET /api/products/**` | `PRODUCT-SERVICE` | Public |
+| Non-GET `/api/products/**` | `PRODUCT-SERVICE` | `ADMIN` |
 
 The `/api` prefix is removed before event and notification requests are
 forwarded because those services expose `/events` and `/notifications`.
@@ -45,6 +47,7 @@ Open http://localhost:9001/swagger-ui.html and select:
 - Events
 - Notifications
 - Camping
+- Products
 
 The gateway proxies each service's `/v3/api-docs` document through `/openapi/*`.
 
@@ -52,7 +55,7 @@ The gateway proxies each service's `/v3/api-docs` document through `/openapi/*`.
 
 | Variable | Default |
 | --- | --- |
-| `EUREKA_URL` | `http://eureka:8761/eureka/` |
+| `EUREKA_URL` | `http://localhost:8761/eureka/` |
 | `KEYCLOAK_ISSUER_URI` | `http://keycloak:8080/realms/campconnect` |
 | `KEYCLOAK_JWK_SET_URI` | Keycloak internal certificate endpoint |
 | `CORS_ALLOWED_ORIGINS` | `http://localhost:4200` |

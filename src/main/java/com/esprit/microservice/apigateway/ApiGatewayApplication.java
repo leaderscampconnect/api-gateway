@@ -22,6 +22,8 @@ public class ApiGatewayApplication {
                         .uri("lb://api-camping"))
                 .route("api-camping-inscription", r -> r.path("/api/inscriptionsite/**")
                         .uri("lb://api-camping"))
+                .route("api-camping-notifications", r -> r.path("/api/camping-notifications/**")
+                        .uri("lb://api-camping"))
                 .route("user-service", r -> r.path("/api/users/**")
                         .uri("lb://user-service"))
                 .route("event-service", r -> r.path("/api/events/**")
@@ -30,6 +32,8 @@ public class ApiGatewayApplication {
                 .route("notification-service", r -> r.path("/api/notifications/**")
                         .filters(filters -> filters.stripPrefix(1))
                         .uri("lb://notification-service"))
+                .route("product-service", r -> r.path("/api/products/**")
+                        .uri("lb://PRODUCT-SERVICE"))
                 .route("event-openapi", r -> r.path("/openapi/events")
                         .filters(filters -> filters.setPath("/v3/api-docs"))
                         .uri("lb://event-service"))
@@ -42,6 +46,9 @@ public class ApiGatewayApplication {
                 .route("user-openapi", r -> r.path("/openapi/users")
                         .filters(filters -> filters.setPath("/v3/api-docs"))
                         .uri("lb://user-service"))
+                .route("product-openapi", r -> r.path("/openapi/products")
+                        .filters(filters -> filters.setPath("/v3/api-docs"))
+                        .uri("lb://PRODUCT-SERVICE"))
                 .build();
     }
 }

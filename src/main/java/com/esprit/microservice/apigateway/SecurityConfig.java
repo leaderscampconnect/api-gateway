@@ -51,6 +51,7 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.GET, "/api/site-camping/getAll").permitAll()
                         .pathMatchers(HttpMethod.GET, "/api/site-camping/getsite/**").permitAll()
                         .pathMatchers(HttpMethod.GET, "/api/site-camping/*/availability").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/api/products/**").permitAll()
 
                         // User Service
                         .pathMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
@@ -86,9 +87,13 @@ public class SecurityConfig {
                         .pathMatchers("/api/events/**").hasAnyRole("ADMIN", "ORGANIZER")
 
                         // Notification Service
+                        .pathMatchers(HttpMethod.GET, "/api/camping-notifications/**").hasAnyRole("USER", "ORGANIZER", "ADMIN", "CAMPER", "SITE_OWNER")
                         .pathMatchers(HttpMethod.GET, "/api/notifications/**").hasAnyRole("USER", "ORGANIZER", "ADMIN", "CAMPER", "SITE_OWNER")
                         .pathMatchers(HttpMethod.PATCH, "/api/notifications/**").hasAnyRole("USER", "ORGANIZER", "ADMIN", "CAMPER", "SITE_OWNER")
                         .pathMatchers("/api/notifications/**").hasAnyRole("ADMIN", "ORGANIZER", "SITE_OWNER")
+
+                        // Product Service
+                        .pathMatchers("/api/products/**").hasRole("ADMIN")
 
                         .anyExchange().authenticated()
                 )
