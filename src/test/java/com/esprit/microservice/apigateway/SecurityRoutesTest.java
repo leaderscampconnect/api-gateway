@@ -119,6 +119,29 @@ class SecurityRoutesTest {
     }
 
     @Test
+    void publicCanReadProductsButOnlyAdminCanManageThem() {
+        webTestClient.get()
+                .uri("/api/products")
+                .exchange()
+                .expectStatus().isOk();
+
+        webTestClient.post()
+                .uri("/api/products")
+                .exchange()
+                .expectStatus().isUnauthorized();
+
+        clientWithRole("USER").post()
+                .uri("/api/products")
+                .exchange()
+                .expectStatus().isForbidden();
+
+        clientWithRole("ADMIN").post()
+                .uri("/api/products")
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
     void authenticatedTokenWithoutApplicationRoleIsForbidden() {
         webTestClient.mutateWith(mockJwt()).get()
                 .uri("/api/notifications")
@@ -173,6 +196,16 @@ class SecurityRoutesTest {
         @PatchMapping("/api/notifications/{notificationId}/read")
         String markNotificationRead() {
             return "read";
+        }
+
+        @GetMapping("/api/products")
+        String getProducts() {
+            return "products";
+        }
+
+        @PostMapping("/api/products")
+        String createProduct() {
+            return "created";
         }
     }
 }
