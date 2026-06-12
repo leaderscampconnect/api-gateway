@@ -22,8 +22,6 @@ public class ApiGatewayApplication {
                         .uri("lb://api-camping"))
                 .route("api-camping-inscription", r -> r.path("/api/inscriptionsite/**")
                         .uri("lb://api-camping"))
-                .route("api-camping-notifications", r -> r.path("/api/camping-notifications/**")
-                        .uri("lb://api-camping"))
                 .route("user-service", r -> r.path("/api/users/**")
                         .uri("lb://user-service"))
                 .route("event-service", r -> r.path("/api/events/**")
