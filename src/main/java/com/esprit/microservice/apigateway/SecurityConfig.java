@@ -64,7 +64,7 @@ public class SecurityConfig {
 
                         // Booking Service
                         .pathMatchers(HttpMethod.POST, "/api/inscriptionsite/add").hasAnyRole("ADMIN", "CAMPER")
-                        .pathMatchers(HttpMethod.PATCH, "/api/inscriptionsite/cancel/**").hasAnyRole("ADMIN", "CAMPER")
+                        .pathMatchers(HttpMethod.PATCH, "/api/inscriptionsite/cancel/**").hasAnyRole("ADMIN", "CAMPER", "SITE_OWNER")
                         .pathMatchers(HttpMethod.GET, "/api/inscriptionsite/my-inscriptions/**").hasAnyRole("ADMIN", "CAMPER")
                         .pathMatchers(HttpMethod.PATCH, "/api/inscriptionsite/confirm-payment/**").hasAnyRole("ADMIN", "CAMPER", "SITE_OWNER")
 
@@ -86,6 +86,7 @@ public class SecurityConfig {
                         .pathMatchers("/api/events/**").hasAnyRole("ADMIN", "ORGANIZER")
 
                         // Notification Service
+                        .pathMatchers(HttpMethod.GET, "/api/camping-notifications/**").hasAnyRole("USER", "ORGANIZER", "ADMIN", "CAMPER", "SITE_OWNER")
                         .pathMatchers(HttpMethod.GET, "/api/notifications/**").hasAnyRole("USER", "ORGANIZER", "ADMIN", "CAMPER", "SITE_OWNER")
                         .pathMatchers(HttpMethod.PATCH, "/api/notifications/**").hasAnyRole("USER", "ORGANIZER", "ADMIN", "CAMPER", "SITE_OWNER")
                         .pathMatchers("/api/notifications/**").hasAnyRole("ADMIN", "ORGANIZER", "SITE_OWNER")
